@@ -1,25 +1,28 @@
-package io.github.lucaargolo.seasonsdelightcompat.mixin;
+package io.github.sazulo.compat.delightrefab.seasons.mixin;
 
-import com.nhoryzon.mc.farmersdelight.block.TomatoVineBlock;
 import io.github.lucaargolo.seasons.utils.FertilizableUtil;
 import io.github.lucaargolo.seasons.utils.SeasonalFertilizable;
-import net.minecraft.block.*;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Fertilizable;
+import net.minecraft.block.PlantBlock;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
+import vectorwing.farmersdelight.common.block.RiceBlock;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(TomatoVineBlock.class)
-public abstract class TomatoVineBlockMixin extends CropBlock implements Fertilizable, SeasonalFertilizable {
+@Mixin(RiceBlock.class)
+public abstract class RiceBlockMixin extends PlantBlock implements Fertilizable, SeasonalFertilizable {
 
-    public TomatoVineBlockMixin(Settings settings) {
+    public RiceBlockMixin(Settings settings) {
         super(settings);
     }
 
-    @Inject(at = @At("HEAD"), method = "randomTick", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "scheduledTick", cancellable = true)
     public void randomTickInject(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
         FertilizableUtil.randomTickInject(this, state, world, pos, random, ci);
     }

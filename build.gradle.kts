@@ -31,16 +31,16 @@ java {
 
 version = project["mod_version"]
 group = project["maven_group"]
-base.archivesName.set("${name.split("-").let{it.subList(0, it.size-1)}.joinToString("-")}-${project["delight_version"]}-compat")
+base.archivesName.set("${name.split("-").let{it.subList(0, it.size-1)}.joinToString("-")}-${project["fdrf_version"]}-compat")
 
 val environment: Map<String, String> = System.getenv()
-val releaseName = "${name.split("-").let{it.subList(0, it.size-2)}.joinToString(" ") { it.capitalize() }} Compat: ${name.split("-").let { it.subList(0, it.size-1) }.last().capitalize()} ${project["delight_version"]}"
+val releaseName = "${name.split("-").let{it.subList(0, it.size-2)}.joinToString(" ") { it.capitalize() }} Compat: ${name.split("-").let { it.subList(0, it.size-1) }.last().capitalize()} ${project["fdrf_version"]}"
 val releaseType = "RELEASE"
 val releaseFile = "${buildDir}/libs/${base.archivesName.get()}-${version}.jar"
 val cfGameVersion = project["seasons_version"].split("+")[1].let{ if(!project["minecraft_version"].contains("-") && project["minecraft_version"].startsWith(it)) project["minecraft_version"] else "$it-Snapshot"}
 
 fun getChangeLog(): String {
-    return "A changelog can be found at https://github.com/lucaargolo/$name/commits/"
+    return "A changelog can be found at https://github.com/sazulo/$name/commits/"
 }
 
 fun getBranch(): String {
@@ -77,6 +77,29 @@ repositories {
         name = "Cafeteria"
         url = uri("https://maven.cafeteria.dev/releases")
     }
+    maven {
+        name = "Modrinth"
+        url = uri("https://api.modrinth.com/maven")
+    }
+    maven {
+        name = "Greenhouse Maven"
+        url = uri("https://repo.greenhouse.house/releases/")
+    }
+    maven { 
+        url = uri("https://mvn.devos.one/releases/")
+    } // Porting Lib
+    maven {
+        url = uri("https://maven.jamieswhiteshirt.com/libs-release") // Reach Entity Attributes (Required by Porting Lib)
+        content {
+            includeGroup("com.jamieswhiteshirt")
+        }
+    }
+    maven {
+        url = uri("https://jitpack.io/") // Fabric ASM
+        content {
+            excludeGroup("io.github.fabricators_of_create")
+        }
+    }
     mavenLocal()
 }
 
@@ -87,18 +110,20 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:${project["loader_version"]}")
 
     modImplementation("io.github.lucaargolo:fabric-seasons:${project["seasons_version"]}")
-    modImplementation("curse.maven:farmers-delight-fabric-${project["delight_id"]}:${project["delight_file"]}")
 
+	modImplementation("vectorwing:FarmersDelight:${project["fdrf_version"]}") {
+        exclude("net.fabricmc")
+    }
 }
 
 tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
-    inputs.property("version", "${project.version}-${project["delight_version"]}")
+    inputs.property("version", "${project.version}-${project["fdrf_version"]}")
 
     from(sourceSets["main"].resources.srcDirs) {
         include("fabric.mod.json")
-        expand(mutableMapOf("version" to "${project.version}-${project["delight_version"]}"))
+        expand(mutableMapOf("version" to "${project.version}-${project["fdrf_version"]}"))
     }
 
     from(sourceSets["main"].resources.srcDirs) {
@@ -141,34 +166,34 @@ task("github") {
 }
 
 //Curseforge publishing
-curseforge {
-    environment["CURSEFORGE_API_KEY"]?.let { apiKey = it }
+// curseforge {
+//     environment["CURSEFORGE_API_KEY"]?.let { apiKey = it }
 
-    project(closureOf<CurseProject> {
-        id = project["curseforge_id"]
-        changelog = getChangeLog()
-        releaseType = this@Build_gradle.releaseType.toLowerCase()
-        addGameVersion(cfGameVersion)
-        addGameVersion("Fabric")
+//     project(closureOf<CurseProject> {
+//         id = project["curseforge_id"]
+//         changelog = getChangeLog()
+//         releaseType = this@Build_gradle.releaseType.toLowerCase()
+//         addGameVersion(cfGameVersion)
+//         addGameVersion("Fabric")
 
-        mainArtifact(file(releaseFile), closureOf<CurseArtifact> {
-            displayName = releaseName
-            relations(closureOf<CurseRelation> {
-                requiredDependency("fabric-seasons")
-                requiredDependency("farmers-delight-fabric")
-            })
-        })
+//         mainArtifact(file(releaseFile), closureOf<CurseArtifact> {
+//             displayName = releaseName
+//             relations(closureOf<CurseRelation> {
+//                 requiredDependency("fabric-seasons")
+//                 requiredDependency("farmers-delight-fabric")
+//             })
+//         })
 
-        afterEvaluate {
-            uploadTask.dependsOn("remapJar")
-        }
+//         afterEvaluate {
+//             uploadTask.dependsOn("remapJar")
+//         }
 
-    })
+//     })
 
-    options(closureOf<Options> {
-        forgeGradleIntegration = false
-    })
-}
+//     options(closureOf<Options> {
+//         forgeGradleIntegration = false
+//     })
+// }
 
 //Modrinth publishing
 modrinth {
@@ -188,7 +213,7 @@ modrinth {
 
     dependencies {
         required.project("fabric-seasons")
-        required.project("farmers-delight-fabric")
+        required.project("farmers-delight-refabricated")
     }
 }
 tasks.modrinth.configure {

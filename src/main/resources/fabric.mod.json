@@ -1,37 +1,36 @@
 {
   "schemaVersion": 1,
-  "id": "seasonsdelightcompat",
+  "id": "seasonsdelightrefabcompat",
   "version": "${version}",
-  "name": "Fabric Seasons: Delight Compat",
-  "description": "Farmer's Delight compatibility for Fabric Seasons",
+  "name": "Fabric Seasons: Delight Refabricated Compat",
+  "description": "Farmer's Delight Refabricated compatibility for Fabric Seasons",
   "authors": [
-    "D4rkness_King"
+    "D4rkness_King",
+    "sazulo"
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/fabric-seasons-delight-compat",
-    "sources": "https://github.com/lucaargolo/fabric-seasons-delight-compat",
-    "issues": "https://github.com/lucaargolo/fabric-seasons-delight-compat/issues"
+    "homepage": "https://modrinth.com/project/seasons-delight-refab-compat",
+    "sources": "https://github.com/sazulo/fabric-seasons-delight-refabricated-compat",
+    "issues": "https://github.com/sazulo/fabric-seasons-delight-refabricated-compat/issues"
   },
   "license": "Mozilla Public License 2.0",
   "icon": "assets/seasonsdelightcompat/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.lucaargolo.seasonsdelightcompat.FabricSeasonsDelightCompat"
+      "io.github.sazulo.compat.delightrefab.seasons.FabricSeasonsDelightRefabCompat"
     ]
   },
   "mixins": [
-    "seasonsdelightcompat.mixins.json"
+    "seasonsdelightrefabcompat.mixins.json"
   ],
   "depends": {
-    "seasons": ">=2.0-BETA",
-    "farmersdelight": ">=1.3.9"
+    "seasons": ">=2.4.2-BETA",
+    "farmersdelight": ">=1.20.1-2.2.0+refabricated"
   },
   "custom": {
     "modmenu": {
-      "links": {
-        "modmenu.discord": "https://discord.com/invite/G4PjhEf"
-      },
+      "links": {},
       "parent": {
         "id": "seasons"
       }
