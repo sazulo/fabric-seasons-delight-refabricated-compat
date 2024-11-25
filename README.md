@@ -1,4 +1,3 @@
-<p align="center"><img src="https://i.imgur.com/X53W9M2.png"></p>
 <h3 align="center">Fabric Seasons: Delight Refabricated Compat</h3>
 <p align="center">A simple mod that adds compatibility between Farmer's Delight Refabricated and Fabric Seasons.</p>
 <p align="center">
