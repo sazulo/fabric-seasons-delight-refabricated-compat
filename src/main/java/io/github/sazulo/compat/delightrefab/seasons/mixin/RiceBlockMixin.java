@@ -22,7 +22,7 @@ public abstract class RiceBlockMixin extends PlantBlock implements Fertilizable,
         super(settings);
     }
 
-    @Inject(at = @At("HEAD"), method = "scheduledTick", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "randomTick", cancellable = true)
     public void randomTickInject(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
         FertilizableUtil.randomTickInject(this, state, world, pos, random, ci);
     }

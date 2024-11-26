@@ -25,8 +25,8 @@ operator fun Project.get(property: String): String {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 version = project["mod_version"]
@@ -62,43 +62,44 @@ repositories {
         url = uri("https://maven.fabricmc.net/")
     }
     maven {
-        name = "TerraformersMC"
-        url = uri("https://maven.terraformersmc.com/releases")
-    }
-    maven {
-        name = "Shedaniel"
-        url = uri("https://maven.shedaniel.me/")
-    }
-    maven {
         name = "Curse Maven"
         url = uri("https://cursemaven.com")
-    }
-    maven {
-        name = "Cafeteria"
-        url = uri("https://maven.cafeteria.dev/releases")
     }
     maven {
         name = "Modrinth"
         url = uri("https://api.modrinth.com/maven")
     }
     maven {
+        name = "Cafeteria"
+        url = uri("https://maven.cafeteria.dev/releases")
+    }
+    maven {
+        url = uri("https://maven.firstdarkdev.xyz/snapshots")
+    }
+    maven {
         name = "Greenhouse Maven"
         url = uri("https://repo.greenhouse.house/releases/")
     }
+    maven {
+        url = uri("https://mvn.devos.one/snapshots/") 
+    }
     maven { 
         url = uri("https://mvn.devos.one/releases/")
-    } // Porting Lib
-    maven {
-        url = uri("https://maven.jamieswhiteshirt.com/libs-release") // Reach Entity Attributes (Required by Porting Lib)
-        content {
-            includeGroup("com.jamieswhiteshirt")
-        }
+    } 
+    maven { // for Porting Lib: Fabric ASM
+        url = uri("https://jitpack.io/")
+    }    
+    maven { // REI and deps
+        url = uri("https://maven.architectury.dev/") 
     }
-    maven {
-        url = uri("https://jitpack.io/") // Fabric ASM
-        content {
-            excludeGroup("io.github.fabricators_of_create")
-        }
+    maven { // REI and deps
+        url = uri("https://maven.shedaniel.me/")
+    } 
+    maven { // Mod Menu, EMI
+        url = uri("https://maven.terraformersmc.com/")
+    } 
+    maven {  // Temporary Porting Lib
+        url = uri("https://repo.greenhouse.house/snapshots/")  
     }
     mavenLocal()
 }
@@ -113,6 +114,7 @@ dependencies {
 
 	modImplementation("vectorwing:FarmersDelight:${project["fdrf_version"]}") {
         exclude("net.fabricmc")
+        exclude("io.github.fabricators_of_create")
     }
 }
 
@@ -133,7 +135,7 @@ tasks.processResources {
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
-    options.release.set(17)
+    options.release.set(21)
 }
 
 java {
