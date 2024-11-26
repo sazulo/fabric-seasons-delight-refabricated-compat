@@ -29,13 +29,13 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
-version = project["mod_version"]
+version = "${project["minecraft_version"]}-${project["mod_version"]}"
 group = project["maven_group"]
 base.archivesName.set("${name.split("-").let{it.subList(0, it.size-1)}.joinToString("-")}-${project["fdrf_version"]}-compat")
 
 val environment: Map<String, String> = System.getenv()
-val releaseName = "${name.split("-").let{it.subList(0, it.size-2)}.joinToString(" ") { it.capitalize() }} Compat: ${name.split("-").let { it.subList(0, it.size-1) }.last().capitalize()} ${project["fdrf_version"]}"
-val releaseType = "RELEASE"
+val releaseName = "${project["release_prefix"]} ${project["fdrf_version"]}"
+val releaseType = "BETA"
 val releaseFile = "${buildDir}/libs/${base.archivesName.get()}-${version}.jar"
 val cfGameVersion = project["seasons_version"].split("+")[1].let{ if(!project["minecraft_version"].contains("-") && project["minecraft_version"].startsWith(it)) project["minecraft_version"] else "$it-Snapshot"}
 
@@ -199,6 +199,7 @@ task("github") {
 
 //Modrinth publishing
 modrinth {
+    environment["DEBUG_MODE"]?.let { debugMode.set(it) }
     environment["MODRINTH_TOKEN"]?.let { token.set(it) }
 
     projectId.set(project["modrinth_id"])
